@@ -30,6 +30,8 @@ function App() {
 
           <Route path="/" element={<LayoutCustom />}>
             <Route index path="computers" element={<Computers />} />
+            <Route path="crear_computers" element={<CrearComputadora />} />
+
             <Route path="crear_computers/:id" element={<CrearComputadora />} />
 
             <Route path="maintenance" element={<Maintenance />} />
