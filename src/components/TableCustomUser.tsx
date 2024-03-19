@@ -2,9 +2,9 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { Button, Input, Table, Tag } from "antd";
 import type { SearchProps } from "antd/es/input/Search";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import axiosInstance from "../services/axiosconfig";
 
 interface DataType {
   id: string;
@@ -42,11 +42,11 @@ const TableCustom = ({
     page_size: number,
     search_term?: string
   ) => {
-    axios
+    axiosInstance
       .get(
         search_term
-          ? `http://127.0.0.1:8000/api/v1/users?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
-          : `http://127.0.0.1:8000/api/v1/users?page_size=${page_size}&current_page=${current_page}`
+          ? `/api/v1/users?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
+          : `/api/v1/users?page_size=${page_size}&current_page=${current_page}`
       )
       .then((response) => {
         setData(response.data.data);
@@ -62,8 +62,8 @@ const TableCustom = ({
   };
 
   const deleteRegister = (id: string) => {
-    axios
-      .delete(`http://127.0.0.1:8000/api/v1/users/${id}`)
+    axiosInstance
+      .delete(`/api/v1/users/${id}`)
       .then((response) => {
         if (response) {
           Swal.fire({
@@ -81,8 +81,8 @@ const TableCustom = ({
   };
 
   const activeRegister = (id: string) => {
-    axios
-      .put(`http://127.0.0.1:8000/api/v1/users_active/${id}`)
+    axiosInstance
+      .put(`/api/v1/users_active/${id}`)
       .then((response) => {
         
         if (response) {

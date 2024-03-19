@@ -8,9 +8,9 @@ import {
   Select
 } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axiosInstance from "../services/axiosconfig";
 import ComputerModel from "../types/ComputerModel";
 
 const CrearComputadora = () => {
@@ -23,8 +23,8 @@ const CrearComputadora = () => {
   >(undefined);
 
   const getAllUsersNameIds = () => {
-    axios
-      .get(`http://127.0.0.1:8000/api/v1/users_name_id`)
+    axiosInstance
+      .get(`/api/v1/users_name_id`)
       .then((response) => {
         setAll_users(response.data);
       })
@@ -34,8 +34,8 @@ const CrearComputadora = () => {
   };
 
   const createComputer = (values: any) => {
-    axios
-      .post(`http://127.0.0.1:8000/api/v1/computers`, values)
+    axiosInstance
+      .post(`/api/v1/computers`, values)
       .then(() => {})
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -43,8 +43,8 @@ const CrearComputadora = () => {
   };
 
   const updateComputer = (values: any) => {
-    axios
-      .put(`http://127.0.0.1:8000/api/v1/computers/${params?.id}`, values)
+    axiosInstance
+      .put(`/api/v1/computers/${params?.id}`, values)
       .then(() => {})
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -52,8 +52,8 @@ const CrearComputadora = () => {
   };
 
   const getOneComputer = () => {
-    axios
-      .get(`http://127.0.0.1:8000/api/v1/computers/${params?.id}`)
+    axiosInstance
+      .get(`/api/v1/computers/${params?.id}`)
       .then((response) => {
         console.log(response.data, "llego");
         setComputerToEdit(response.data);

@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Modal, Row, Select } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axiosInstance from "../services/axiosconfig";
 
 const ModalCreateMaintenance = ({
   open,
@@ -20,8 +20,8 @@ const ModalCreateMaintenance = ({
   const [all_computers, setAll_computers] = useState([]);
 
   const getAllUsersNameIds = () => {
-    axios
-      .get(`http://127.0.0.1:8000/api/v1/users_name_id`)
+    axiosInstance
+      .get(`/api/v1/users_name_id`)
       .then((response) => {
         setAll_users(response.data);
       })
@@ -31,8 +31,8 @@ const ModalCreateMaintenance = ({
   };
 
   const getAllComputersNameIds = () => {
-    axios
-      .get(`http://127.0.0.1:8000/api/v1/computers_name_id`)
+    axiosInstance
+      .get(`/api/v1/computers_name_id`)
       .then((response) => {
         setAll_computers(response.data);
       })
@@ -42,8 +42,8 @@ const ModalCreateMaintenance = ({
   };
 
   const createMaintenance = (values: any) => {
-    axios
-      .post(`http://127.0.0.1:8000/api/v1/mantenimiento`, values)
+    axiosInstance
+      .post(`/api/v1/mantenimiento`, values)
       .then(() => {
         handleCreate(true);
       })
@@ -53,10 +53,9 @@ const ModalCreateMaintenance = ({
   };
 
   const updateMaintenance = (id: string, values: any) => {
-    axios
-      .put(`http://127.0.0.1:8000/api/v1/mantenimiento/${id}`, values)
+    axiosInstance
+      .put(`/api/v1/mantenimiento/${id}`, values)
       .then(() => {
-        
         handleCreate(true);
       })
       .catch((error) => {
@@ -65,8 +64,6 @@ const ModalCreateMaintenance = ({
   };
 
   const onFinish = () => {
-    
-
     if (Object.keys(maintenance).length !== 0) {
       updateMaintenance(maintenance?._id, form.getFieldsValue());
     } else {
@@ -80,8 +77,6 @@ const ModalCreateMaintenance = ({
   }, []);
 
   useEffect(() => {
-    
-
     if (maintenance && Object.keys(maintenance).length !== 0) {
       form.setFieldsValue({
         descripcion_mantenimiento: maintenance?.descripcion_mantenimiento || "",

@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Modal, Row } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import axios from "axios";
 import { useEffect } from "react";
+import axiosInstance from "../services/axiosconfig";
 
 const ModalCreateUser = ({
   open,
@@ -17,8 +17,8 @@ const ModalCreateUser = ({
   const [form] = Form.useForm();
 
   const createUsers = (values: any) => {
-    axios
-      .post(`http://127.0.0.1:8000/api/v1/users`, values)
+    axiosInstance
+      .post(`/api/v1/users`, values)
       .then(() => {
         handleCreate(true);
       })
@@ -28,8 +28,8 @@ const ModalCreateUser = ({
   };
 
   const updateUser = (id: string, values: any) => {
-    axios
-      .put(`http://127.0.0.1:8000/api/v1/users/${id}`, values)
+    axiosInstance
+      .put(`/api/v1/users/${id}`, values)
       .then(() => {
         handleCreate(true);
       })
