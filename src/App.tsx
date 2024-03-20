@@ -15,7 +15,7 @@ function App() {
     if (DEBUG == false) {
       axiosInstance
         .get(`/`)
-        .then((response) => {
+        .then(() => {
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
