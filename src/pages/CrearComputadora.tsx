@@ -78,7 +78,6 @@ const CrearComputadora = () => {
     axiosInstance
       .get(`/api/v1/computers/${params?.id}`)
       .then((response) => {
-        console.log(response.data, "llego");
         setComputerToEdit(response.data);
 
         form.setFieldsValue({
@@ -133,7 +132,6 @@ const CrearComputadora = () => {
   useEffect(() => {
     if (params?.id) {
       getOneComputer();
-      console.log(params.id, "existe");
     }
   }, [params]);
 
