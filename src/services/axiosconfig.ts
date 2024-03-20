@@ -8,7 +8,7 @@ const baseURL = DEBUG
 
 const axiosInstance = axios.create({
   baseURL,
-  timeout: 5000, // Tiempo de espera de 5 segundos
+  timeout: 60000,
   headers: {
     "Content-Type": "application/json",
   },
