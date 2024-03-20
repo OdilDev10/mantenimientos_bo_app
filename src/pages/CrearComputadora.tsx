@@ -1,15 +1,8 @@
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Select
-} from "antd";
+import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
 import ComputerModel from "../types/ComputerModel";
 
@@ -36,8 +29,23 @@ const CrearComputadora = () => {
   const createComputer = (values: any) => {
     axiosInstance
       .post(`/api/v1/computers`, values)
-      .then(() => {})
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Guardado correctamente",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
       .catch((error) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          text: `${error}`,
+          title: "Error creando",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -45,8 +53,23 @@ const CrearComputadora = () => {
   const updateComputer = (values: any) => {
     axiosInstance
       .put(`/api/v1/computers/${params?.id}`, values)
-      .then(() => {})
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Actualizado correctamente",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
       .catch((error) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          text: `${error}`,
+          title: "Error actualizando",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -91,10 +114,15 @@ const CrearComputadora = () => {
   };
 
   const onFinish = () => {
+    const formValues = form.getFieldsValue();
+    if (formValues.usuario === "ninguno") {
+      formValues.usuario = "";
+    }
+
     if (computerToEdit) {
-      updateComputer(form.getFieldsValue());
+      updateComputer(formValues);
     } else {
-      createComputer(form.getFieldsValue());
+      createComputer(formValues);
     }
   };
 
@@ -374,10 +402,10 @@ const CrearComputadora = () => {
                   type: "string",
                 },
               ]}
-              label="codigo"
+              label="inventario"
               name="codigo"
             >
-              <Input type="text" name="codigo" placeholder="codigo" />
+              <Input type="text" name="codigo" placeholder="inventario" />
             </FormItem>
             <FormItem
               rules={[
@@ -568,7 +596,8 @@ const CrearComputadora = () => {
               label="usueario asignado"
               name="user_id"
             >
-              <Select style={{ width: "100%" }} placeholder="usueario asignado">
+              <Select style={{ width: "100%" }} placeholder="Usuario asignado">
+                <Option value="ninguno">Ninguno</Option>
                 {all_users?.length > 0 &&
                   all_users?.map((option: any) => {
                     return (

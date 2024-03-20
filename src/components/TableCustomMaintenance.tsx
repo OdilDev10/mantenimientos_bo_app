@@ -1,10 +1,16 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import { Button, Input, Table, Tag } from "antd";
+import {
+  Button,
+  Input,
+  Table,
+  Tag
+} from "antd";
 import type { SearchProps } from "antd/es/input/Search";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
+import ModalExportar from "./ModalExportar";
 
 interface DataType {
   id: string;
@@ -26,6 +32,7 @@ const TableCustomMaintenance = ({
   handleMaintenanceEdit: (maintenance: any) => void;
 }) => {
   const [data, setData] = useState<DataType[]>([]);
+
   const [pagination, setPagination] = useState<{
     current: number;
     pageSize: number;
@@ -36,6 +43,7 @@ const TableCustomMaintenance = ({
     total: 0,
   });
   const [paramInSearch, setParamInSearch] = useState("");
+
 
   const getAllMaintenance = (
     current_page: number,
@@ -57,6 +65,7 @@ const TableCustomMaintenance = ({
         });
       })
       .catch((error) => {
+       
         console.error("Error fetching data:", error);
       });
   };
@@ -74,6 +83,13 @@ const TableCustomMaintenance = ({
         getAllMaintenance(pagination.current, pagination.pageSize);
       })
       .catch((error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          text: `${error}`,
+          title: "Error desactivando registro",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -91,6 +107,13 @@ const TableCustomMaintenance = ({
         getAllMaintenance(pagination.current, pagination.pageSize);
       })
       .catch((error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          text: `${error}`,
+          title: "Error activando registro",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -117,7 +140,7 @@ const TableCustomMaintenance = ({
       key: "descripcion_mantenimiento",
     },
     {
-      title: "Usuario",
+      title: "Tecnico",
       dataIndex: "user",
       key: "user",
       render: (record: any) => {
@@ -159,7 +182,7 @@ const TableCustomMaintenance = ({
       key: "updated_at",
     },
     {
-      title: "Borrado",
+      title: "Desactivado",
       dataIndex: "deleted_at",
       key: "deleted_at",
     },
@@ -195,7 +218,7 @@ const TableCustomMaintenance = ({
                   showCancelButton: true,
                   confirmButtonColor: "#3085d6",
                   cancelButtonColor: "#d33",
-                  confirmButtonText: "¡Sí, eliminarlo!",
+                  confirmButtonText: "¡Sí, desactivar!",
                 }).then((result) => {
                   if (result.isConfirmed) {
                     deleteRegister(record._id);
@@ -203,7 +226,7 @@ const TableCustomMaintenance = ({
                 });
               }}
             >
-              Eliminar
+              Desactivar
             </Button>
 
             <Button
@@ -254,6 +277,8 @@ const TableCustomMaintenance = ({
           gap: "10px",
         }}
       >
+       
+       <ModalExportar url={"/api/v1/mantenimiento/export"} fileName={"mantenimientos"}/>
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
           onClick={() => {

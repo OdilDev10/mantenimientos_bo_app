@@ -5,6 +5,7 @@ import type { SearchProps } from "antd/es/input/Search";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
+import ModalExportar from "./ModalExportar";
 
 interface DataType {
   id: string;
@@ -16,7 +17,7 @@ interface DataType {
   deleted: boolean;
 }
 
-const TableCustom = ({
+const TableCustomUsers = ({
   getAllAgain,
   handleOpenModal,
   handleUserEdit,
@@ -57,6 +58,7 @@ const TableCustom = ({
         });
       })
       .catch((error) => {
+     
         console.error("Error fetching data:", error);
       });
   };
@@ -76,6 +78,13 @@ const TableCustom = ({
         }
       })
       .catch((error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          text: `${error}`,
+          title: "Error desactivando registro",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -96,6 +105,13 @@ const TableCustom = ({
       }
       })
       .catch((error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          text: `${error}`,
+          title: "Error activando registro",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -138,7 +154,7 @@ const TableCustom = ({
       key: "updated_at",
     },
     {
-      title: "Borrado",
+      title: "Desactivado",
       dataIndex: "deleted_at",
       key: "deleted_at",
     },
@@ -174,7 +190,7 @@ const TableCustom = ({
                   showCancelButton: true,
                   confirmButtonColor: "#3085d6",
                   cancelButtonColor: "#d33",
-                  confirmButtonText: "¡Sí, eliminarlo!",
+                  confirmButtonText: "¡Sí, desactivar!",
                 }).then((result) => {
                   if (result.isConfirmed) {
                     deleteRegister(record._id);
@@ -182,7 +198,7 @@ const TableCustom = ({
                 });
               }}
             >
-              Eliminar
+              Desactivar
             </Button>
 
             <Button
@@ -233,6 +249,9 @@ const TableCustom = ({
           gap: "10px",
         }}
       >
+       <ModalExportar url={"/api/v1/users/export"} fileName={"users"}/>
+
+
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
           onClick={() => {
@@ -260,4 +279,4 @@ const TableCustom = ({
   );
 };
 
-export default TableCustom;
+export default TableCustomUsers;

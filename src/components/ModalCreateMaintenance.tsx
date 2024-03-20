@@ -9,7 +9,7 @@ const ModalCreateMaintenance = ({
   handleCreate,
   maintenance,
 }: {
-  handleCreate: (creado: boolean) => void;
+  handleCreate: () => void;
   handleCancel: () => void;
   open: boolean;
   maintenance: any;
@@ -45,7 +45,7 @@ const ModalCreateMaintenance = ({
     axiosInstance
       .post(`/api/v1/mantenimiento`, values)
       .then(() => {
-        handleCreate(true);
+        handleCreate();
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -56,7 +56,7 @@ const ModalCreateMaintenance = ({
     axiosInstance
       .put(`/api/v1/mantenimiento/${id}`, values)
       .then(() => {
-        handleCreate(true);
+        handleCreate();
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -164,12 +164,12 @@ const ModalCreateMaintenance = ({
                     type: "string",
                   },
                 ]}
-                label="usueario asignado"
+                label="tecnico asignado"
                 name="user_id"
               >
                 <Select
                   style={{ width: "100%" }}
-                  placeholder="usueario asignado"
+                  placeholder="tecnico asignado"
                 >
                   {all_users?.length > 0 &&
                     all_users?.map((option: any) => {

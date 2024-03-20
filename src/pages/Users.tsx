@@ -1,25 +1,15 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalCreateUser from "../components/ModalCreateUsers";
-import TableCustom from "../components/TableCustomUser";
 import Swal from "sweetalert2";
+import TableCustomUsers from "../components/TableCustomUser";
 
 const Users = () => {
   const [open, setOpen] = useState(false);
   const [userCreate, setUserCreate] = useState(false);
   const [userEdit, setuserEdit] = useState({});
 
-  const handleCreate = (creado: boolean) => {
-    setUserCreate(creado);
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Guardado correctamente",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-  };
 
   const handleCancel = () => {
     setOpen(false);
@@ -33,6 +23,19 @@ const Users = () => {
     setuserEdit(user);
   };
 
+  useEffect(() => {
+    if(userCreate){
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Guardado correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setUserCreate(false)
+    }
+  }, [userCreate])
+  
 
   return (
     <div>
@@ -43,7 +46,7 @@ const Users = () => {
       >
         Users
       </h1>
-      <TableCustom
+      <TableCustomUsers
         getAllAgain={userCreate}
         handleOpenModal={handleOpenModal}
         handleUserEdit={handleUserEdit}
@@ -61,7 +64,7 @@ const Users = () => {
 
       <ModalCreateUser
         user={userEdit}
-        handleCreate={handleCreate}
+        handleCreate={() => setUserCreate(true)}
         handleCancel={handleCancel}
         open={open}
       />

@@ -5,8 +5,25 @@ import Computers from "./pages/Computers";
 import Maintenance from "./pages/Maintenance";
 import Users from "./pages/Users";
 import CrearComputadora from "./pages/CrearComputadora";
+import { useEffect } from "react";
+import axiosInstance from "./services/axiosconfig";
 
 function App() {
+  useEffect(() => {
+    const DEBUG: boolean = JSON.parse(import.meta.env.VITE_DEBUG);
+
+    if (DEBUG == false) {
+      axiosInstance
+        .get(`/`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, []);
+
   return (
     <>
       <BrowserRouter>

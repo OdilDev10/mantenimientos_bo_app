@@ -2,6 +2,7 @@ import { Button, Col, Form, Input, Modal, Row } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { useEffect } from "react";
 import axiosInstance from "../services/axiosconfig";
+import Swal from "sweetalert2";
 
 const ModalCreateUser = ({
   open,
@@ -9,7 +10,7 @@ const ModalCreateUser = ({
   handleCreate,
   user,
 }: {
-  handleCreate: (creado: boolean) => void;
+  handleCreate: () => void;
   handleCancel: () => void;
   open: boolean;
   user: any;
@@ -20,9 +21,16 @@ const ModalCreateUser = ({
     axiosInstance
       .post(`/api/v1/users`, values)
       .then(() => {
-        handleCreate(true);
+        handleCreate();
       })
       .catch((error) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          text: `${error}`,
+          title: "Error creando",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -31,9 +39,16 @@ const ModalCreateUser = ({
     axiosInstance
       .put(`/api/v1/users/${id}`, values)
       .then(() => {
-        handleCreate(true);
+        handleCreate();
       })
       .catch((error) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          text: `${error}`,
+          title: "Error actualizando",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };

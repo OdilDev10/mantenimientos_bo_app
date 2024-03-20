@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
 import ComputerModel from "../types/ComputerModel";
+import ModalExportar from "./ModalExportar";
 
 const TableCustomComputers: React.FC = () => {
   const [data, setData] = useState<ComputerModel[]>([]);
@@ -42,6 +43,7 @@ const TableCustomComputers: React.FC = () => {
         });
       })
       .catch((error) => {
+    
         console.error("Error fetching data:", error);
       });
   };
@@ -61,6 +63,13 @@ const TableCustomComputers: React.FC = () => {
         }
       })
       .catch((error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          text: `${error}`,
+          title: "Error desactivando registro",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -80,6 +89,13 @@ const TableCustomComputers: React.FC = () => {
         }
       })
       .catch((error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          text: `${error}`,
+          title: "Error activando registro",
+          showConfirmButton: false,
+        });
         console.error("Error fetching data:", error);
       });
   };
@@ -101,7 +117,7 @@ const TableCustomComputers: React.FC = () => {
 
   const columns = [
     {
-      title: "Código",
+      title: "Inventario",
       dataIndex: "codigo",
       key: "codigo",
     },
@@ -243,7 +259,7 @@ const TableCustomComputers: React.FC = () => {
       render: (updated_at: string) => <span>{updated_at}</span>,
     },
     {
-      title: "Borrado",
+      title: "Desactivado",
       dataIndex: "deleted_at",
       key: "deleted_at",
     },
@@ -279,7 +295,7 @@ const TableCustomComputers: React.FC = () => {
                   showCancelButton: true,
                   confirmButtonColor: "#3085d6",
                   cancelButtonColor: "#d33",
-                  confirmButtonText: "¡Sí, eliminarlo!",
+                  confirmButtonText: "¡Sí, desactivar!",
                 }).then((result) => {
                   if (result.isConfirmed) {
                     deleteRegister(record._id);
@@ -287,7 +303,7 @@ const TableCustomComputers: React.FC = () => {
                 });
               }}
             >
-              Eliminar
+              Desactivar
             </Button>
 
             <Button
@@ -337,6 +353,8 @@ const TableCustomComputers: React.FC = () => {
           gap: "10px",
         }}
       >
+       <ModalExportar url={"/api/v1/computers/export"} fileName={"computers"}/>
+
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
           onClick={() => {
