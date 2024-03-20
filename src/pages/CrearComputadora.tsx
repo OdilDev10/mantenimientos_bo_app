@@ -115,8 +115,8 @@ const CrearComputadora = () => {
 
   const onFinish = () => {
     const formValues = form.getFieldsValue();
-    if (formValues.usuario === "ninguno") {
-      formValues.usuario = "";
+    if (formValues.user_id === "ninguno") {
+      formValues.user_id = "";
     }
 
     if (computerToEdit) {
