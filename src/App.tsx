@@ -1,12 +1,14 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import LayoutCustom from "./components/Layout";
 import Computers from "./pages/Computers";
-import Maintenance from "./pages/Maintenance";
-import Users from "./pages/Users";
-import CrearComputadora from "./pages/CrearComputadora";
-import { useEffect } from "react";
+import { lazy, useEffect } from "react";
 import axiosInstance from "./services/axiosconfig";
+
+const CrearComputadora = lazy(() => import('./pages/CrearComputadora'))
+const Users = lazy(() => import('./pages/Users'))
+const Maintenance = lazy(() => import('./pages/Maintenance'))
+
 
 function App() {
   useEffect(() => {
@@ -23,9 +25,10 @@ function App() {
     }
   }, []);
 
+
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route
             path="*"
@@ -54,7 +57,7 @@ function App() {
             <Route path="users" element={<Users />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }

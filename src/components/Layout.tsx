@@ -1,4 +1,5 @@
 import { Layout, Menu, theme } from "antd";
+import { Suspense } from "react";
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
@@ -45,7 +46,9 @@ const LayoutCustom = () => {
             borderRadius: borderRadiusLG,
           }}
         >
+          <Suspense fallback={'Loading...'}>
           <Outlet />
+          </Suspense>
         </div>
       </Content>
       <Footer style={{ textAlign: "center" }}>
