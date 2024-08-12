@@ -4,6 +4,7 @@ import LayoutCustom from "./components/Layout";
 import Computers from "./pages/Computers";
 import { lazy, useEffect } from "react";
 import axiosInstance from "./services/axiosconfig";
+import Clients from "./pages/Clients";
 
 const CrearComputadora = lazy(() => import('./pages/CrearComputadora'))
 const Users = lazy(() => import('./pages/Users'))
@@ -55,6 +56,8 @@ function App() {
 
             <Route path="maintenance" element={<Maintenance />} />
             <Route path="users" element={<Users />} />
+            <Route path="clients" element={<Clients />} />
+
           </Route>
         </Routes>
       </HashRouter>

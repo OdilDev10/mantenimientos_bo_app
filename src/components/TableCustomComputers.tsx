@@ -121,15 +121,29 @@ const TableCustomComputers: React.FC = () => {
       dataIndex: "codigo",
       key: "codigo",
     },
-    {
-      title: "Departamento",
-      dataIndex: "departamento",
-      key: "departamento",
-    },
+    // {
+    //   title: "Departamento",
+    //   dataIndex: "departamento",
+    //   key: "departamento",
+    // },
     {
       title: "Usuario",
       dataIndex: "user",
       key: "user",
+      render: (record: any) => {
+        return (
+          <span>
+            {record[0]?.nombre
+              ? record[0]?.nombre + " " + record[0]?.apellido
+              : "No asignado"}
+          </span>
+        );
+      },
+    },
+    {
+      title: "Cliente",
+      dataIndex: "client",
+      key: "client",
       render: (record: any) => {
         return (
           <span>

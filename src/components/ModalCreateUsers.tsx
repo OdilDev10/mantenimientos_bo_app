@@ -18,8 +18,9 @@ const ModalCreateUser = ({
   const [form] = Form.useForm();
 
   const createUsers = (values: any) => {
+    console.log(values, "values");
     axiosInstance
-      .post(`/api/v1/users`, values)
+      .post(`/api/v1/users`, { ...values, role: "admin" })
       .then(() => {
         handleCreate();
       })
@@ -54,7 +55,6 @@ const ModalCreateUser = ({
   };
 
   const onFinish = () => {
-
     if (Object.keys(user).length !== 0) {
       updateUser(user?._id, form.getFieldsValue());
     } else {
@@ -63,7 +63,6 @@ const ModalCreateUser = ({
   };
 
   useEffect(() => {
-
     if (user && Object.keys(user).length !== 0) {
       form.setFieldsValue({
         nombre: user.nombre,

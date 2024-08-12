@@ -8,6 +8,8 @@ const items = [
   { label: "Computers", to: "computers" },
   { label: "Users", to: "users" },
   { label: "Maintenance", to: "maintenance" },
+  { label: "Clients", to: "clients" },
+
 ].map((item, index) => ({
   key: index,
   label: <Link to={item.to}>{item.label}</Link>,
