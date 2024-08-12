@@ -3,7 +3,6 @@ import { FloatButton } from "antd";
 import { useEffect, useState } from "react";
 import ModalCreateUser from "../components/ModalCreateUsers";
 import Swal from "sweetalert2";
-import TableCustomUsers from "../components/TableCustomUser";
 import TableCustomClients from "../components/TableCustomClients";
 
 const Clients = () => {
