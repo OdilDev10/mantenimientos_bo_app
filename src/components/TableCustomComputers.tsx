@@ -31,8 +31,8 @@ const TableCustomComputers: React.FC = () => {
     axiosInstance
       .get(
         search_term
-          ? `/api/v1/computers?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
-          : `/api/v1/computers?page_size=${page_size}&current_page=${current_page}`
+          ? `computers?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
+          : `computers?page_size=${page_size}&current_page=${current_page}`
       )
       .then((response) => {
         setData(response.data.data);
@@ -43,14 +43,13 @@ const TableCustomComputers: React.FC = () => {
         });
       })
       .catch((error) => {
-    
         console.error("Error fetching data:", error);
       });
   };
 
   const deleteRegister = (id: string) => {
     axiosInstance
-      .delete(`/api/v1/computers/${id}`)
+      .delete(`computers/${id}`)
       .then((response) => {
         if (response) {
           Swal.fire({
@@ -76,7 +75,7 @@ const TableCustomComputers: React.FC = () => {
 
   const activeRegister = (id: string) => {
     axiosInstance
-      .put(`/api/v1/computers_active/${id}`)
+      .put(`computers_active/${id}`)
       .then((response) => {
         if (response) {
           Swal.fire({
@@ -353,7 +352,7 @@ const TableCustomComputers: React.FC = () => {
           gap: "10px",
         }}
       >
-       <ModalExportar url={"/api/v1/computers/export"} fileName={"computers"}/>
+        <ModalExportar url={"computers/export"} fileName={"computers"} />
 
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}

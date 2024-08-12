@@ -17,7 +17,7 @@ interface DataType {
   deleted: boolean;
 }
 
-const TableCustomUsers = ({
+const TableCustomClients = ({
   getAllAgain,
   handleOpenModal,
   handleUserEdit,
@@ -38,7 +38,7 @@ const TableCustomUsers = ({
   });
   const [paramInSearch, setParamInSearch] = useState("");
 
-  const getAllUsers = (
+  const getAllClients = (
     current_page: number,
     page_size: number,
     search_term?: string
@@ -46,8 +46,8 @@ const TableCustomUsers = ({
     axiosInstance
       .get(
         search_term
-          ? `users?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}&role=admin`
-          : `users?page_size=${page_size}&current_page=${current_page}&role=admin`
+          ? `Clients?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
+          : `Clients?page_size=${page_size}&current_page=${current_page}`
       )
       .then((response) => {
         setData(response.data.data);
@@ -64,7 +64,7 @@ const TableCustomUsers = ({
 
   const deleteRegister = (id: string) => {
     axiosInstance
-      .delete(`users/${id}`)
+      .delete(`Clients/${id}`)
       .then((response) => {
         if (response) {
           Swal.fire({
@@ -73,7 +73,7 @@ const TableCustomUsers = ({
             icon: "success",
           });
 
-          getAllUsers(pagination.current, pagination.pageSize);
+          getAllClients(pagination.current, pagination.pageSize);
         }
       })
       .catch((error) => {
@@ -90,7 +90,7 @@ const TableCustomUsers = ({
 
   const activeRegister = (id: string) => {
     axiosInstance
-      .put(`users_active/${id}`)
+      .put(`Clients_active/${id}`)
       .then((response) => {
         if (response) {
           Swal.fire({
@@ -99,7 +99,7 @@ const TableCustomUsers = ({
             icon: "success",
           });
 
-          getAllUsers(pagination.current, pagination.pageSize);
+          getAllClients(pagination.current, pagination.pageSize);
         }
       })
       .catch((error) => {
@@ -115,19 +115,19 @@ const TableCustomUsers = ({
   };
 
   useEffect(() => {
-    getAllUsers(pagination.current, pagination.pageSize);
+    getAllClients(pagination.current, pagination.pageSize);
   }, [getAllAgain]);
 
   const onSearch: SearchProps["onSearch"] = (value, _e) => {
     setParamInSearch(value);
 
-    getAllUsers(1, pagination.pageSize, value);
+    getAllClients(1, pagination.pageSize, value);
   };
 
   const { Search } = Input;
 
   const onChangePagination = (value: any) => {
-    getAllUsers(value.current, value.pageSize, paramInSearch);
+    getAllClients(value.current, value.pageSize, paramInSearch);
   };
 
   const columns: TableProps<DataType>["columns"] = [
@@ -247,7 +247,7 @@ const TableCustomUsers = ({
           gap: "10px",
         }}
       >
-        <ModalExportar url={"users/export"} fileName={"users"} />
+        <ModalExportar url={"Clients/export"} fileName={"Clients"} />
 
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
@@ -276,4 +276,4 @@ const TableCustomUsers = ({
   );
 };
 
-export default TableCustomUsers;
+export default TableCustomClients;

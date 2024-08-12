@@ -1,40 +1,74 @@
-import { Layout, Menu, theme } from "antd";
-import { Suspense } from "react";
-import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import { Avatar, Dropdown, Layout, Menu, MenuProps, Space, theme } from "antd";
+import { Suspense, useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import useStoreAuth from "../store/auth";
 
 const { Header, Content, Footer } = Layout;
 
-const items = [
+const itemsMenu = [
   { label: "Computers", to: "computers" },
   { label: "Users", to: "users" },
   { label: "Maintenance", to: "maintenance" },
+  { label: "Clients", to: "clients" },
 ].map((item, index) => ({
   key: index,
   label: <Link to={item.to}>{item.label}</Link>,
 }));
 
 const LayoutCustom = () => {
-  const location = useLocation();
-
-  if(location.pathname === '/'){
-    return <Navigate to={'/computers'} replace/>
-  }
-
+  const { user, setUser }: any = useStoreAuth();
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  useEffect(() => {
+    if (!user || !localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, [user]);
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <p
+          onClick={() => {
+            setUser(null);
+            localStorage.clear();
+            navigate("/login");
+          }}
+        >
+          Cerrar sesion
+        </p>
+      ),
+    },
+  ];
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ display: "flex", alignItems: "center" }}>
-        <div className="demo-logo" />
+        <div
+          className="demo-logo"
+          style={{ display: "flex", justifyContent: "space-between" }}
+        />
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["0"]}
-          items={items}
+          items={itemsMenu}
           style={{ flex: 1, minWidth: 0 }}
         />
+        <span style={{ color: "#fff" }}>
+          <Dropdown menu={{ items }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+                {user?.name + " " + user?.last_name}
+              </Space>
+            </a>
+          </Dropdown>
+        </span>
       </Header>
       <Content style={{ padding: "0 48px" }}>
         <div
@@ -46,14 +80,14 @@ const LayoutCustom = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Suspense fallback={'Loading...'}>
-          <Outlet />
+          <Suspense fallback={"Loading..."}>
+            <Outlet />
           </Suspense>
         </div>
       </Content>
       <Footer style={{ textAlign: "center" }}>
         <a href="https://odilmartinez.com">
-        ©{new Date().getFullYear()} Created by Odil Martinez
+          ©{new Date().getFullYear()} Created by Odil Martinez
         </a>
       </Footer>
     </Layout>

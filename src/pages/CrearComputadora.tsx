@@ -17,7 +17,7 @@ const CrearComputadora = () => {
 
   const getAllUsersNameIds = () => {
     axiosInstance
-      .get(`/api/v1/users_name_id`)
+      .get(`users_name_id`)
       .then((response) => {
         setAll_users(response.data);
       })
@@ -28,7 +28,7 @@ const CrearComputadora = () => {
 
   const createComputer = (values: any) => {
     axiosInstance
-      .post(`/api/v1/computers`, values)
+      .post(`computers`, values)
       .then(() => {
         Swal.fire({
           position: "top-end",
@@ -52,7 +52,7 @@ const CrearComputadora = () => {
 
   const updateComputer = (values: any) => {
     axiosInstance
-      .put(`/api/v1/computers/${params?.id}`, values)
+      .put(`computers/${params?.id}`, values)
       .then(() => {
         Swal.fire({
           position: "top-end",
@@ -76,7 +76,7 @@ const CrearComputadora = () => {
 
   const getOneComputer = () => {
     axiosInstance
-      .get(`/api/v1/computers/${params?.id}`)
+      .get(`computers/${params?.id}`)
       .then((response) => {
         setComputerToEdit(response.data);
 

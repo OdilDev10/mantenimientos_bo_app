@@ -1,11 +1,6 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
-import {
-  Button,
-  Input,
-  Table,
-  Tag
-} from "antd";
+import { Button, Input, Table, Tag } from "antd";
 import type { SearchProps } from "antd/es/input/Search";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -44,7 +39,6 @@ const TableCustomMaintenance = ({
   });
   const [paramInSearch, setParamInSearch] = useState("");
 
-
   const getAllMaintenance = (
     current_page: number,
     page_size: number,
@@ -53,8 +47,8 @@ const TableCustomMaintenance = ({
     axiosInstance
       .get(
         search_term
-          ? `/api/v1/mantenimiento?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
-          : `/api/v1/mantenimiento?page_size=${page_size}&current_page=${current_page}`
+          ? `mantenimiento?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
+          : `mantenimiento?page_size=${page_size}&current_page=${current_page}`
       )
       .then((response) => {
         setData(response.data.data);
@@ -65,14 +59,13 @@ const TableCustomMaintenance = ({
         });
       })
       .catch((error) => {
-       
         console.error("Error fetching data:", error);
       });
   };
 
   const deleteRegister = (id: string) => {
     axiosInstance
-      .delete(`/api/v1/mantenimiento/${id}`)
+      .delete(`mantenimiento/${id}`)
       .then(() => {
         Swal.fire({
           title: "¡Eliminado!",
@@ -96,7 +89,7 @@ const TableCustomMaintenance = ({
 
   const activeRegister = (id: string) => {
     axiosInstance
-      .put(`/api/v1/mantenimiento_active/${id}`)
+      .put(`mantenimiento_active/${id}`)
       .then(() => {
         Swal.fire({
           title: "Activado",
@@ -277,8 +270,10 @@ const TableCustomMaintenance = ({
           gap: "10px",
         }}
       >
-       
-       <ModalExportar url={"/api/v1/mantenimiento/export"} fileName={"mantenimientos"}/>
+        <ModalExportar
+          url={"mantenimiento/export"}
+          fileName={"mantenimientos"}
+        />
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
           onClick={() => {

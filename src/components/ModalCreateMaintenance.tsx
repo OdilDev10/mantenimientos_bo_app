@@ -21,7 +21,7 @@ const ModalCreateMaintenance = ({
 
   const getAllUsersNameIds = () => {
     axiosInstance
-      .get(`/api/v1/users_name_id`)
+      .get(`users_name_id`)
       .then((response) => {
         setAll_users(response.data);
       })
@@ -32,7 +32,7 @@ const ModalCreateMaintenance = ({
 
   const getAllComputersNameIds = () => {
     axiosInstance
-      .get(`/api/v1/computers_name_id`)
+      .get(`computers_name_id`)
       .then((response) => {
         setAll_computers(response.data);
       })
@@ -43,7 +43,7 @@ const ModalCreateMaintenance = ({
 
   const createMaintenance = (values: any) => {
     axiosInstance
-      .post(`/api/v1/mantenimiento`, values)
+      .post(`mantenimiento`, values)
       .then(() => {
         handleCreate();
       })
@@ -54,7 +54,7 @@ const ModalCreateMaintenance = ({
 
   const updateMaintenance = (id: string, values: any) => {
     axiosInstance
-      .put(`/api/v1/mantenimiento/${id}`, values)
+      .put(`mantenimiento/${id}`, values)
       .then(() => {
         handleCreate();
       })
