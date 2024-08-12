@@ -62,6 +62,8 @@ function App() {
 
             <Route path="maintenance" element={<Maintenance />} />
             <Route path="users" element={<Users />} />
+            <Route path="clients" element={<Clients />} />
+
           </Route>
         </Routes>
       </HashRouter>
