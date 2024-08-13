@@ -26,9 +26,12 @@ const Register = () => {
     let validate = await form.validateFields();
     console.log(validate);
 
-    createUser(form.getFieldsValue())
+    createUser(form.getFieldsValue(), 'client')
       .then((response: any) => {
         console.log(response);
+        if(response?.msg === "User registered successfully"){
+          window.location.href = "/"
+        }
       })
       .catch((error: any) => {});
   };

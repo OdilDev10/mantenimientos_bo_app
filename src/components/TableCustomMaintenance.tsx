@@ -139,8 +139,8 @@ const TableCustomMaintenance = ({
       render: (record: any) => {
         return (
           <span>
-            {record[0]?.nombre
-              ? record[0]?.nombre + " " + record[0]?.apellido
+            {record[0]?.name
+              ? record[0]?.name + " " + record[0]?.last_name
               : "No asignado"}
           </span>
         );
@@ -153,13 +153,9 @@ const TableCustomMaintenance = ({
       render: (record: any) => {
         return (
           <span>
-            {record[0]?.codigo
-              ? record[0]?.codigo +
-                " " +
-                record[0]?.marca +
-                " " +
-                record[0]?.modelo
-              : "No asignado"}
+            {`${record[0]?.codigo || ""} ${record[0]?.marca || ""} ${
+              record[0]?.modelo || ""
+            }`}
           </span>
         );
       },

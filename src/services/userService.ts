@@ -1,9 +1,12 @@
 import showErrorModal from "../utils/showErrorsModal";
 import axiosInstance from "./axiosconfig";
 
-export const createUser = async (values: any) => {
+export const createUser = async (values: any, role = "client") => {
   try {
-    let response = await axiosInstance.post(`users/auth/register`, values);
+    let response = await axiosInstance.post(`users/auth/register`, {
+      ...values,
+      role,
+    });
 
     console.log(response.data);
     return response.data;

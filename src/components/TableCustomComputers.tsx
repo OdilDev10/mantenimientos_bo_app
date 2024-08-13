@@ -132,8 +132,8 @@ const TableCustomComputers: React.FC = () => {
       render: (record: any) => {
         return (
           <span>
-            {record[0]?.nombre
-              ? record[0]?.nombre + " " + record[0]?.apellido
+            {record[0]?.name
+              ? record[0]?.name + " " + record[0]?.last_name
               : "No asignado"}
           </span>
         );
@@ -146,8 +146,9 @@ const TableCustomComputers: React.FC = () => {
       render: (record: any) => {
         return (
           <span>
-            {record[0]?.nombre
-              ? record[0]?.nombre + " " + record[0]?.apellido
+            
+            {record[0]?.name
+              ? record[0]?.name + " " + record[0]?.last_name
               : "No asignado"}
           </span>
         );

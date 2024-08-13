@@ -143,12 +143,11 @@ const ModalCreateMaintenance = ({
                   {all_computers?.length > 0 &&
                     all_computers?.map((option: any) => {
                       return (
-                        <Option key={option._id} value={option._id}>
-                          {option.codigo +
-                            " " +
-                            option.marca +
-                            " " +
-                            option.modelo}
+                        <Option key={option?._id} value={option?._id}>
+                          {`${option?.codigo || ""} 
+                             ${option?.marca || ""} 
+                              ${option?.modelo || ""} 
+                            `}
                         </Option>
                       );
                     })}
@@ -175,7 +174,7 @@ const ModalCreateMaintenance = ({
                     all_users?.map((option: any) => {
                       return (
                         <Option key={option._id} value={option._id}>
-                          {option.nombre + " " + option.apellido}
+                          {option.name + " " + option.last_name}
                         </Option>
                       );
                     })}

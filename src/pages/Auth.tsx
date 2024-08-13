@@ -7,8 +7,8 @@ import useStoreAuth from "../store/auth";
 
 const Auth = () => {
   const [form] = Form.useForm();
-  const {setUser, user}: any = useStoreAuth()
-  const navigate = useNavigate()
+  const { setUser }: any = useStoreAuth();
+  const navigate = useNavigate();
 
   const localLogin = async () => {
     let validate = await form.validateFields();
@@ -20,17 +20,14 @@ const Auth = () => {
         console.log(response?.user);
         localStorage.setItem("token", response?.token);
         localStorage.setItem("user", JSON.stringify(response?.user));
-        setUser(response?.user)
-
-        navigate('/computers')
+        setUser(response?.user);
+        navigate("/computers"); // Navegar a /computers tras el login exitoso
       })
       .catch((error: any) => {
         console.log(error);
       });
   };
 
-
-  console.log(user, 'AQUI user');
   return (
     <div
       style={{

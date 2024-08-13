@@ -1,4 +1,13 @@
-import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+} from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -17,7 +26,7 @@ const CrearComputadora = () => {
 
   const getAllUsersNameIds = () => {
     axiosInstance
-      .get(`users_name_id`)
+      .get(`clients_name_id`)
       .then((response) => {
         setAll_users(response.data);
       })
@@ -91,7 +100,7 @@ const CrearComputadora = () => {
           slots: response?.data?.slots || "",
           slots_dispositivos: response?.data?.slots_dispositivos || "",
           slots_ocupados: response?.data?.slots_ocupados || "",
-          user_id: response?.data?.user_id || "",
+          client_id: response?.data?.client_id || "",
           fecha_asignacion_usuario:
             response?.data?.fecha_asignacion_usuario || "",
           description: response?.data?.description || "",
@@ -114,8 +123,8 @@ const CrearComputadora = () => {
 
   const onFinish = () => {
     const formValues = form.getFieldsValue();
-    if (formValues.user_id === "ninguno") {
-      formValues.user_id = "";
+    if (formValues.client_id === "ninguno") {
+      formValues.client_id = "";
     }
 
     if (computerToEdit) {
@@ -147,7 +156,7 @@ const CrearComputadora = () => {
       <Form form={form} onFinish={onFinish} layout="vertical">
         <Row gutter={[16, 16]}>
           <Col xs={24} lg={12}>
-            <FormItem
+            {/* <FormItem
               rules={[
                 {
                   required: true,
@@ -163,23 +172,23 @@ const CrearComputadora = () => {
                 name="departamento"
                 placeholder="Departamento"
               />
-            </FormItem>
+            </FormItem> */}
 
             <FormItem
               rules={[
                 {
                   required: true,
-                  message: "Por favor ingresa el fecha asignacion usuario",
-                  type: "string",
+                  message: "Por favor ingresa el fecha de llegada",
+                  type: "date",
                 },
               ]}
-              label="fecha asignacion usuario"
+              label="fecha de llegada"
               name="fecha_asignacion_usuario"
             >
-              <Input
-                type="text"
+              <DatePicker
                 name="fecha_asignacion_usuario"
                 placeholder="fecha asignacion usuario"
+                style={{ width: "100%" }}
               />
             </FormItem>
 
@@ -231,7 +240,7 @@ const CrearComputadora = () => {
               label="marca"
               name="marca"
             >
-              <Select
+              {/* <Select
                 defaultValue=""
                 style={{ width: "100%" }}
                 // onChange={handleChange}
@@ -241,7 +250,9 @@ const CrearComputadora = () => {
                   { value: "msi", label: "msi" },
                 ]}
                 placeholder="marca"
-              />
+              /> */}
+              <Input type="text" name="marca" placeholder="marca" />
+
             </FormItem>
 
             <FormItem
@@ -279,18 +290,19 @@ const CrearComputadora = () => {
             <FormItem
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: "Por favor ingresa el fecha lanzamiento",
-                  type: "string",
+                  type: "date",
+
                 },
               ]}
               label="fecha lanzamiento"
               name="year_lanzamiento"
             >
-              <Input
-                type="text"
+             <DatePicker
                 name="year_lanzamiento"
-                placeholder="fecha lanzamiento"
+                placeholder="fecha de lanzamiento"
+                style={{ width: "100%" }}
               />
             </FormItem>
 
@@ -312,7 +324,7 @@ const CrearComputadora = () => {
               />
             </FormItem>
 
-            <FormItem
+            {/* <FormItem
               rules={[
                 {
                   required: true,
@@ -333,7 +345,7 @@ const CrearComputadora = () => {
                 ]}
                 placeholder="tipo perfil"
               />
-            </FormItem>
+            </FormItem> */}
 
             <FormItem
               rules={[
@@ -373,6 +385,8 @@ const CrearComputadora = () => {
                 options={[
                   { value: "intel", label: "intel" },
                   { value: "amd", label: "amd" },
+                  { value: "snapdragon", label: "snapdragon" },
+
                 ]}
                 placeholder="marca procesador"
               />
@@ -392,7 +406,7 @@ const CrearComputadora = () => {
               <Input type="text" name="generacion" placeholder="generacion" />
             </FormItem>
 
-            <FormItem
+            {/* <FormItem
               rules={[
                 {
                   required: true,
@@ -404,7 +418,7 @@ const CrearComputadora = () => {
               name="codigo"
             >
               <Input type="text" name="codigo" placeholder="inventario" />
-            </FormItem>
+            </FormItem> */}
             <FormItem
               rules={[
                 {
@@ -423,17 +437,17 @@ const CrearComputadora = () => {
               rules={[
                 {
                   required: true,
-                  message: "Por favor ingresa el capacidad de disco",
+                  message: "Por favor ingresa el capacidad de almacenamiento",
                   type: "string",
                 },
               ]}
-              label="capacidad de disco"
+              label="capacidad de almacenamiento"
               name="capacidad_disco"
             >
               <Input
                 type="text"
                 name="capacidad_disco"
-                placeholder="capacidad de disco"
+                placeholder="capacidad de almacenamiento"
               />
             </FormItem>
 
@@ -591,16 +605,16 @@ const CrearComputadora = () => {
                   type: "string",
                 },
               ]}
-              label="usueario asignado"
-              name="user_id"
+              label="cliente asignado"
+              name="client_id"
             >
-              <Select style={{ width: "100%" }} placeholder="Usuario asignado">
+              <Select style={{ width: "100%" }} placeholder="Cliente asignado">
                 <Option value="ninguno">Ninguno</Option>
                 {all_users?.length > 0 &&
                   all_users?.map((option: any) => {
                     return (
-                      <Option key={option._id} value={option._id}>
-                        {option.nombre + " " + option.apellido}
+                      <Option key={option?._id} value={option?._id}>
+                        {option?.name + " " + option?.last_name}
                       </Option>
                     );
                   })}

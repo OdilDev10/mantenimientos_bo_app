@@ -17,15 +17,7 @@ interface DataType {
   deleted: boolean;
 }
 
-const TableCustomClients = ({
-  getAllAgain,
-  handleOpenModal,
-  handleUserEdit,
-}: {
-  getAllAgain?: boolean;
-  handleOpenModal: () => void;
-  handleUserEdit: (user: any) => void;
-}) => {
+const TableCustomClients = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [pagination, setPagination] = useState<{
     current: number;
@@ -46,8 +38,8 @@ const TableCustomClients = ({
     axiosInstance
       .get(
         search_term
-          ? `Clients?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
-          : `Clients?page_size=${page_size}&current_page=${current_page}`
+          ? `users/clients?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
+          : `users/clients?page_size=${page_size}&current_page=${current_page}`
       )
       .then((response) => {
         setData(response.data.data);
@@ -116,7 +108,7 @@ const TableCustomClients = ({
 
   useEffect(() => {
     getAllClients(pagination.current, pagination.pageSize);
-  }, [getAllAgain]);
+  }, []);
 
   const onSearch: SearchProps["onSearch"] = (value, _e) => {
     setParamInSearch(value);
@@ -133,13 +125,13 @@ const TableCustomClients = ({
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "Nombre",
-      dataIndex: "nombre",
-      key: "nombre",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Apellido",
-      dataIndex: "apellido",
-      key: "apellido",
+      dataIndex: "last_name",
+      key: "last_name",
     },
     {
       title: "Creacion",
@@ -219,17 +211,6 @@ const TableCustomClients = ({
               }}
             >
               Activar
-            </Button>
-
-            <Button
-              type="primary"
-              style={{ background: "#e5de00", color: "#000" }}
-              onClick={() => {
-                handleOpenModal();
-                handleUserEdit(record);
-              }}
-            >
-              Actualizar
             </Button>
           </div>
         );

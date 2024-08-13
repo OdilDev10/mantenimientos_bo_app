@@ -1,21 +1,18 @@
-import { Avatar, Dropdown, Layout, Menu, MenuProps, Space, theme } from "antd";
 import { Suspense, useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import useStoreAuth from "../store/auth";
-
-const { Header, Content, Footer } = Layout;
+import { Avatar, Dropdown, Layout, Menu, MenuProps, Space, theme } from "antd";
+import { Content, Footer, Header } from "antd/es/layout/layout";
 
 const itemsMenu = [
   { label: "Computers", to: "computers" },
-  { label: "Users", to: "users" },
   { label: "Maintenance", to: "maintenance" },
-  { label: "Clients", to: "clients" },
 ].map((item, index) => ({
   key: index,
   label: <Link to={item.to}>{item.label}</Link>,
 }));
 
-const LayoutCustom = () => {
+const LayoutCustomClient = () => {
   const { user, setUser }: any = useStoreAuth();
   const navigate = useNavigate();
   const {
@@ -23,12 +20,13 @@ const LayoutCustom = () => {
   } = theme.useToken();
 
   useEffect(() => {
+
     if (!user || !localStorage.getItem("token")) {
       navigate("/");
-    } else if (user?.role === "client") {
-      navigate("/dashboard/clients/computers");
+    } else if (user?.role === "admin") {
+      navigate("/computers");
     }
-  }, [user]);
+  }, [user, ]);
 
   const items: MenuProps["items"] = [
     {
@@ -96,4 +94,4 @@ const LayoutCustom = () => {
   );
 };
 
-export default LayoutCustom;
+export default LayoutCustomClient;

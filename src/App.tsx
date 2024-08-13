@@ -8,6 +8,7 @@ import Auth from "./pages/Auth";
 import Register from "./pages/Register";
 import LayoutCustomAuth from "./components/LayoutCustomAuth";
 import Clients from "./pages/Clients";
+import LayoutCustomClient from "./components/LayoutCustomClient";
 
 const CrearComputadora = lazy(() => import("./pages/CrearComputadora"));
 const Users = lazy(() => import("./pages/Users"));
@@ -50,20 +51,22 @@ function App() {
 
           <Route path="/" element={<LayoutCustomAuth />}>
             <Route index path="" element={<Auth />} />
-            <Route index path="register" element={<Register />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+
+          <Route path="/dashboard/clients" element={<LayoutCustomClient />}>
+            <Route index path="computers" element={<Computers />} />
+            <Route path="maintenance" element={<Maintenance />} />
+
           </Route>
 
           <Route path="/" element={<LayoutCustom />}>
             <Route index path="computers" element={<Computers />} />
-            <Route index path="clients" element={<Clients />} />
             <Route path="crear_computers" element={<CrearComputadora />} />
-
             <Route path="crear_computers/:id" element={<CrearComputadora />} />
-
             <Route path="maintenance" element={<Maintenance />} />
             <Route path="users" element={<Users />} />
             <Route path="clients" element={<Clients />} />
-
           </Route>
         </Routes>
       </HashRouter>

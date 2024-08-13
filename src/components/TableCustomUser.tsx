@@ -133,13 +133,13 @@ const TableCustomUsers = ({
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "Nombre",
-      dataIndex: "nombre",
-      key: "nombre",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Apellido",
-      dataIndex: "apellido",
-      key: "apellido",
+      dataIndex: "last_name",
+      key: "last_name",
     },
     {
       title: "Creacion",
