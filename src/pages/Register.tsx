@@ -33,7 +33,9 @@ const Register = () => {
           window.location.href = "/"
         }
       })
-      .catch((error: any) => {});
+      .catch((error: any) => {
+        console.log(error);
+      });
   };
 
   return (

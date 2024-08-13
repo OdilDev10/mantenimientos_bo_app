@@ -1,13 +1,11 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { Button, Input, Table, Tag } from "antd";
-import type { SearchProps } from "antd/es/input/Search";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
-import ModalExportar from "./ModalExportar";
 import useStoreAuth from "../store/auth";
-import Search from "antd/es/transfer/search";
+import ModalExportar from "./ModalExportar";
 
 interface DataType {
   id: string;
@@ -40,7 +38,8 @@ const TableCustomMaintenance = ({
     pageSize: 10,
     total: 0,
   });
-  const [paramInSearch, setParamInSearch] = useState("");
+
+
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -138,7 +137,7 @@ const TableCustomMaintenance = ({
   };
 
   const onChangePagination = (value: any) => {
-    getAllMaintenance(value.current, value.pageSize, paramInSearch);
+    getAllMaintenance(value.current, value.pageSize, searchTerm);
   };
 
   const columns: TableProps<DataType>["columns"] = [

@@ -1,6 +1,6 @@
 import { Avatar, Dropdown, Layout, Menu, MenuProps, Space, theme } from "antd";
-import { Suspense, useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Suspense, useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import useStoreAuth from "../store/auth";
 
 const { Header, Content, Footer } = Layout;
