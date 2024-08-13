@@ -1,8 +1,7 @@
 import axios from "axios";
 
-
 const getToken = () => localStorage.getItem("token");
-console.log(import.meta.env.VITE_DEBUG);
+
 const baseURL =
   import.meta.env.VITE_DEBUG === "true"
     ? import.meta.env.VITE_LOCAL_URL
@@ -18,4 +17,3 @@ const axiosInstance = axios.create({
 });
 
 export default axiosInstance;
-
