@@ -16,10 +16,13 @@ const Auth = () => {
 
     loginUser(values?.email, values?.password)
       .then((response: any) => {
-        localStorage.setItem("token", response?.token);
-        localStorage.setItem("user", JSON.stringify(response?.user));
-        setUser(response?.user);
-        navigate("/computers"); // Navegar a /computers tras el login exitoso
+
+        if (response?.user && response?.token) {
+          localStorage.setItem("token", response?.token);
+          localStorage.setItem("user", JSON.stringify(response?.user));
+          setUser(response?.user);
+          navigate("/computers"); 
+        }
       })
       .catch((error: any) => {
         console.log(error);
