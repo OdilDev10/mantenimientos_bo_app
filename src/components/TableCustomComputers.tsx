@@ -1,15 +1,16 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Button, Input, Table, Tag } from "antd";
-import type { SearchProps } from "antd/es/input/Search";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
+import useStoreAuth from "../store/auth";
 import ComputerModel from "../types/ComputerModel";
 import ModalExportar from "./ModalExportar";
 
 const TableCustomComputers: React.FC = () => {
   const [data, setData] = useState<ComputerModel[]>([]);
+  const { user }: any = useStoreAuth();
   const [pagination, setPagination] = useState<{
     current: number;
     pageSize: number;
@@ -19,9 +20,9 @@ const TableCustomComputers: React.FC = () => {
     pageSize: 10,
     total: 0,
   });
-
-  const [paramInSearch, setParamInSearch] = useState("");
   const navigate = useNavigate();
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getAllComputers = (
     current_page: number,
@@ -30,7 +31,11 @@ const TableCustomComputers: React.FC = () => {
   ) => {
     axiosInstance
       .get(
-        search_term
+        user && user.role == "client"
+          ? search_term
+            ? `computers_by_client?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}&idUser=${user?._id}`
+            : `computers_by_client?page_size=${page_size}&current_page=${current_page}&idUser=${user?._id}`
+          : search_term
           ? `computers?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
           : `computers?page_size=${page_size}&current_page=${current_page}`
       )
@@ -103,30 +108,36 @@ const TableCustomComputers: React.FC = () => {
     getAllComputers(pagination.current, pagination.pageSize);
   }, []);
 
-  const onSearch: SearchProps["onSearch"] = (value, _e) => {
-    setParamInSearch(value);
-    getAllComputers(1, pagination.pageSize, value);
+  const onSearch = (e: any) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      getAllComputers(1, pagination.pageSize, newSearchTerm);
+    }, 600); // 600 milisegundos de retraso
   };
 
-  const { Search } = Input;
-
   const onChangePagination = (value: any) => {
-    getAllComputers(value.current, value.pageSize, paramInSearch);
+    getAllComputers(value.current, value.pageSize, searchTerm);
   };
 
   const columns = [
-    {
-      title: "Inventario",
-      dataIndex: "codigo",
-      key: "codigo",
-    },
+    // {
+    //   title: "Inventario",
+    //   dataIndex: "codigo",
+    //   key: "codigo",
+    // },
     // {
     //   title: "Departamento",
     //   dataIndex: "departamento",
     //   key: "departamento",
     // },
     {
-      title: "Usuario",
+      title: user && user.role == "client" ? "Tecnico" : "Usuario",
       dataIndex: "user",
       key: "user",
       render: (record: any) => {
@@ -139,21 +150,22 @@ const TableCustomComputers: React.FC = () => {
         );
       },
     },
-    {
-      title: "Cliente",
-      dataIndex: "client",
-      key: "client",
-      render: (record: any) => {
-        return (
-          <span>
-            
-            {record[0]?.name
-              ? record[0]?.name + " " + record[0]?.last_name
-              : "No asignado"}
-          </span>
-        );
-      },
-    },
+    user && user.role != "client"
+      ? {
+          title: "Cliente",
+          dataIndex: "client",
+          key: "client",
+          render: (record: any) => {
+            return (
+              <span>
+                {record[0]?.name
+                  ? record[0]?.name + " " + record[0]?.last_name
+                  : "No asignado"}
+              </span>
+            );
+          },
+        }
+      : {},
     {
       title: "Serie",
       dataIndex: "serie",
@@ -291,70 +303,72 @@ const TableCustomComputers: React.FC = () => {
         </>
       ),
     },
-    {
-      title: "Acciones",
-      key: "acciones",
-      width: 600,
-      render: (record: any) => {
-        return (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Swal.fire({
-                  title: "¿Estás seguro?",
-                  text: "Se desactivara el registro",
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonColor: "#3085d6",
-                  cancelButtonColor: "#d33",
-                  confirmButtonText: "¡Sí, desactivar!",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    deleteRegister(record._id);
-                  }
-                });
-              }}
-            >
-              Desactivar
-            </Button>
+    user && user.role != "client"
+      ? {
+          title: "Acciones",
+          key: "acciones",
+          width: 600,
+          render: (record: any) => {
+            return (
+              <div style={{ display: "flex", gap: "10px" }}>
+                <Button
+                  type="primary"
+                  danger
+                  onClick={() => {
+                    Swal.fire({
+                      title: "¿Estás seguro?",
+                      text: "Se desactivara el registro",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "¡Sí, desactivar!",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        deleteRegister(record._id);
+                      }
+                    });
+                  }}
+                >
+                  Desactivar
+                </Button>
 
-            <Button
-              type="primary"
-              style={{ background: "#009975" }}
-              onClick={() => {
-                Swal.fire({
-                  title: "¿Estás seguro?",
-                  text: "Se activara el registro",
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonColor: "#3085d6",
-                  cancelButtonColor: "#d33",
-                  confirmButtonText: "¡Sí, activar!",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    activeRegister(record._id);
-                  }
-                });
-              }}
-            >
-              Activar
-            </Button>
+                <Button
+                  type="primary"
+                  style={{ background: "#009975" }}
+                  onClick={() => {
+                    Swal.fire({
+                      title: "¿Estás seguro?",
+                      text: "Se activara el registro",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "¡Sí, activar!",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        activeRegister(record._id);
+                      }
+                    });
+                  }}
+                >
+                  Activar
+                </Button>
 
-            <Button
-              type="primary"
-              style={{ background: "#e5de00", color: "#000" }}
-              onClick={() => {
-                navigate(`/crear_computers/${record._id}`);
-              }}
-            >
-              Actualizar
-            </Button>
-          </div>
-        );
-      },
-    },
+                <Button
+                  type="primary"
+                  style={{ background: "#e5de00", color: "#000" }}
+                  onClick={() => {
+                    navigate(`/crear_computers/${record._id}`);
+                  }}
+                >
+                  Actualizar
+                </Button>
+              </div>
+            );
+          },
+        }
+      : {},
   ];
 
   return (
@@ -367,22 +381,26 @@ const TableCustomComputers: React.FC = () => {
           gap: "10px",
         }}
       >
-        <ModalExportar url={"computers/export"} fileName={"computers"} />
+        {user && user.role != "client" && (
+          <ModalExportar url={"computers/export"} fileName={"computers"} />
+        )}
 
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
           onClick={() => {
             Swal.fire({
               title: "Se puede buscar por:",
-              text: "Departamento, Codigo, Serie, Marca, Modelo, Nombre de usuario.",
+              text: "Serie, Marca, Modelo, Nombre de usuario, Nombre de cliente.",
               icon: "info",
             });
           }}
         />
-        <Search
-          placeholder="input search text"
-          onSearch={onSearch}
-          style={{ width: 250 }}
+
+        <Input
+          onChange={onSearch}
+          value={searchTerm}
+          placeholder="Buscar computadoras..."
+          style={{ width: "50%" }}
         />
       </div>
       <Table

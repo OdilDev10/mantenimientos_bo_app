@@ -2,8 +2,10 @@ import { PlusOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
 import { useNavigate } from "react-router-dom";
 import TableCustomComputers from "../components/TableCustomComputers";
+import useStoreAuth from "../store/auth";
 
 const Computers = () => {
+  const { user }: any = useStoreAuth();
  
   const navigate = useNavigate();
   return (
@@ -18,6 +20,8 @@ const Computers = () => {
 
       <TableCustomComputers />
 
+      {user && user.role != "client" && (
+
       <FloatButton
         type="primary"
         tooltip={<div>Crear</div>}
@@ -26,7 +30,7 @@ const Computers = () => {
           navigate("/crear_computers");
         }}
       />
-
+      )}
  
     </div>
   );

@@ -4,12 +4,13 @@ import { FloatButton } from "antd";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import ModalCreateMaintenance from "../components/ModalCreateMaintenance";
+import useStoreAuth from "../store/auth";
 
 const Maintenance = () => {
   const [open, setOpen] = useState(false);
   const [maintenanceEdit, setMaintenanceEdit] = useState({});
   const [maintenanceCreate, setMaintenanceCreate] = useState(false);
-
+  const { user }: any = useStoreAuth();
 
   const handleCancel = () => {
     setOpen(false);
@@ -24,18 +25,18 @@ const Maintenance = () => {
   };
 
   useEffect(() => {
-   if(maintenanceCreate){
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Guardado correctamente",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    setMaintenanceCreate(false)
-   }
-  }, [maintenanceCreate])
-  
+    if (maintenanceCreate) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Guardado correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setMaintenanceCreate(false);
+    }
+  }, [maintenanceCreate]);
+
   return (
     <div>
       <h1
@@ -52,15 +53,17 @@ const Maintenance = () => {
         handleMaintenanceEdit={handleMaintenanceEdit}
       />
 
-      <FloatButton
-        type="primary"
-        tooltip={<div>Crear</div>}
-        icon={<PlusOutlined />}
-        onClick={() => {
-          setOpen(true);
-          handleMaintenanceEdit({})
-        }}
-      />
+      {user && user.role != "client" && (
+        <FloatButton
+          type="primary"
+          tooltip={<div>Crear</div>}
+          icon={<PlusOutlined />}
+          onClick={() => {
+            setOpen(true);
+            handleMaintenanceEdit({});
+          }}
+        />
+      )}
 
       <ModalCreateMaintenance
         maintenance={maintenanceEdit}

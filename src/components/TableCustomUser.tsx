@@ -1,8 +1,7 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { Button, Input, Table, Tag } from "antd";
-import type { SearchProps } from "antd/es/input/Search";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
 import ModalExportar from "./ModalExportar";
@@ -36,7 +35,8 @@ const TableCustomUsers = ({
     pageSize: 10,
     total: 0,
   });
-  const [paramInSearch, setParamInSearch] = useState("");
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getAllUsers = (
     current_page: number,
@@ -118,16 +118,21 @@ const TableCustomUsers = ({
     getAllUsers(pagination.current, pagination.pageSize);
   }, [getAllAgain]);
 
-  const onSearch: SearchProps["onSearch"] = (value, _e) => {
-    setParamInSearch(value);
+  const onSearch = (e: any) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
 
-    getAllUsers(1, pagination.pageSize, value);
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    
+    debounceTimeoutRef.current = setTimeout(() => {
+      getAllUsers(1, pagination.pageSize, newSearchTerm);
+    }, 600); // 600 milisegundos de retraso
   };
 
-  const { Search } = Input;
-
   const onChangePagination = (value: any) => {
-    getAllUsers(value.current, value.pageSize, paramInSearch);
+    getAllUsers(value.current, value.pageSize, searchTerm);
   };
 
   const columns: TableProps<DataType>["columns"] = [
@@ -259,10 +264,12 @@ const TableCustomUsers = ({
             });
           }}
         />
-        <Search
-          placeholder="input search text"
-          onSearch={onSearch}
-          style={{ width: 250 }}
+      
+      <Input
+          onChange={onSearch}
+          value={searchTerm}
+          placeholder="Buscar computadoras..."
+          style={{ width: "50%" }}
         />
       </div>
       <Table

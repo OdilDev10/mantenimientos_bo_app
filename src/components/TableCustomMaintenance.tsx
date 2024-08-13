@@ -2,10 +2,12 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { Button, Input, Table, Tag } from "antd";
 import type { SearchProps } from "antd/es/input/Search";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
 import ModalExportar from "./ModalExportar";
+import useStoreAuth from "../store/auth";
+import Search from "antd/es/transfer/search";
 
 interface DataType {
   id: string;
@@ -27,6 +29,7 @@ const TableCustomMaintenance = ({
   handleMaintenanceEdit: (maintenance: any) => void;
 }) => {
   const [data, setData] = useState<DataType[]>([]);
+  const { user }: any = useStoreAuth();
 
   const [pagination, setPagination] = useState<{
     current: number;
@@ -38,6 +41,8 @@ const TableCustomMaintenance = ({
     total: 0,
   });
   const [paramInSearch, setParamInSearch] = useState("");
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getAllMaintenance = (
     current_page: number,
@@ -46,7 +51,11 @@ const TableCustomMaintenance = ({
   ) => {
     axiosInstance
       .get(
-        search_term
+        user && user.role == "client"
+          ? search_term
+            ? `mantenimiento_by_client?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}&idUser=${user?._id}`
+            : `mantenimiento_by_client?page_size=${page_size}&current_page=${current_page}&idUser=${user?._id}`
+          : search_term
           ? `mantenimiento?page_size=${page_size}&current_page=${current_page}&search_term=${search_term}`
           : `mantenimiento?page_size=${page_size}&current_page=${current_page}`
       )
@@ -115,12 +124,18 @@ const TableCustomMaintenance = ({
     getAllMaintenance(pagination.current, pagination.pageSize);
   }, [getAllAgain]);
 
-  const onSearch: SearchProps["onSearch"] = (value, _e) => {
-    setParamInSearch(value);
-    getAllMaintenance(1, pagination.pageSize, value);
-  };
+  const onSearch = (e: any) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
 
-  const { Search } = Input;
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      getAllMaintenance(1, pagination.pageSize, newSearchTerm);
+    }, 600); // 600 milisegundos de retraso
+  };
 
   const onChangePagination = (value: any) => {
     getAllMaintenance(value.current, value.pageSize, paramInSearch);
@@ -133,13 +148,13 @@ const TableCustomMaintenance = ({
       key: "descripcion_mantenimiento",
     },
     {
-      title: "Tecnico",
+      title: "Usuario",
       dataIndex: "user",
       key: "user",
       render: (record: any) => {
         return (
           <span>
-            {record[0]?.name
+            {record && record[0]?.name
               ? record[0]?.name + " " + record[0]?.last_name
               : "No asignado"}
           </span>
@@ -153,9 +168,9 @@ const TableCustomMaintenance = ({
       render: (record: any) => {
         return (
           <span>
-            {`${record[0]?.codigo || ""} ${record[0]?.marca || ""} ${
-              record[0]?.modelo || ""
-            }`}
+            {record && record[0]?.codigo
+              ? record[0]?.codigo + " " + record[0]?.marca
+              : "No asignado"}
           </span>
         );
       },
@@ -266,24 +281,27 @@ const TableCustomMaintenance = ({
           gap: "10px",
         }}
       >
-        <ModalExportar
-          url={"mantenimiento/export"}
-          fileName={"mantenimientos"}
-        />
+        {user && user.role != "client" && (
+          <ModalExportar
+            url={"mantenimiento/export"}
+            fileName={"mantenimientos"}
+          />
+        )}
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
           onClick={() => {
             Swal.fire({
               title: "Se puede buscar por:",
-              text: "Description del mantenimiento, Codigo pc, Nombre de usuario.",
+              text: "Description del mantenimiento, Nombre PC, Modelo PC, Nombre de usuario.",
               icon: "info",
             });
           }}
         />
-        <Search
-          placeholder="input search text"
-          onSearch={onSearch}
-          style={{ width: 250 }}
+        <Input
+          onChange={onSearch}
+          value={searchTerm}
+          placeholder="Buscar computadoras..."
+          style={{ width: "50%" }}
         />
       </div>
       <Table

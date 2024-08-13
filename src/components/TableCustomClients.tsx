@@ -1,11 +1,9 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import type { TableProps } from "antd";
 import { Button, Input, Table, Tag } from "antd";
-import type { SearchProps } from "antd/es/input/Search";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import axiosInstance from "../services/axiosconfig";
-import ModalExportar from "./ModalExportar";
 
 interface DataType {
   id: string;
@@ -28,7 +26,8 @@ const TableCustomClients = () => {
     pageSize: 10,
     total: 0,
   });
-  const [paramInSearch, setParamInSearch] = useState("");
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getAllClients = (
     current_page: number,
@@ -110,16 +109,22 @@ const TableCustomClients = () => {
     getAllClients(pagination.current, pagination.pageSize);
   }, []);
 
-  const onSearch: SearchProps["onSearch"] = (value, _e) => {
-    setParamInSearch(value);
 
-    getAllClients(1, pagination.pageSize, value);
+  const onSearch = (e: any) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    
+    debounceTimeoutRef.current = setTimeout(() => {
+      getAllClients(1, pagination.pageSize, newSearchTerm);
+    }, 600); // 600 milisegundos de retraso
   };
 
-  const { Search } = Input;
-
   const onChangePagination = (value: any) => {
-    getAllClients(value.current, value.pageSize, paramInSearch);
+    getAllClients(value.current, value.pageSize, searchTerm);
   };
 
   const columns: TableProps<DataType>["columns"] = [
@@ -228,22 +233,23 @@ const TableCustomClients = () => {
           gap: "10px",
         }}
       >
-        <ModalExportar url={"Clients/export"} fileName={"Clients"} />
 
         <InfoCircleOutlined
           style={{ cursor: "pointer" }}
           onClick={() => {
             Swal.fire({
               title: "Se puede buscar por:",
-              text: "Nombre de usuario, Apellido de usuario.",
+              text: "Nombre del cliente, Apellido del cliente.",
               icon: "info",
             });
           }}
         />
-        <Search
-          placeholder="input search text"
-          onSearch={onSearch}
-          style={{ width: 250 }}
+      
+      <Input
+          onChange={onSearch}
+          value={searchTerm}
+          placeholder="Buscar computadoras..."
+          style={{ width: "50%" }}
         />
       </div>
       <Table
