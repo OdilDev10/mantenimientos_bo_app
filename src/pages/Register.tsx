@@ -23,12 +23,10 @@ const Register = () => {
   const [form] = Form.useForm();
 
   const localRegister = async () => {
-    let validate = await form.validateFields();
-    console.log(validate);
+    await form.validateFields();
 
     createUser(form.getFieldsValue(), 'client')
       .then((response: any) => {
-        console.log(response);
         if(response?.msg === "User registered successfully"){
           window.location.href = "/"
         }
@@ -41,13 +39,14 @@ const Register = () => {
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        padding: '50px 0px'
       }}
     >
-      <Card style={{ width: "50%", height: "85%", textAlign: "center" }}>
+      <Card style={{ minWidth: "50%", minHeight: "85%", textAlign: "center" }}>
         <h2>Mantenimientos APP</h2>
         <h3>Registrarse</h3>
         <img

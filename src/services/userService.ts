@@ -8,7 +8,6 @@ export const createUser = async (values: any, role = "client") => {
       role,
     });
 
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     console.error("Error creating user:", error);
@@ -23,7 +22,6 @@ export const loginUser = async (email: string, password: string) => {
       password: password,
     });
 
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     console.error("Error creating user:", error);

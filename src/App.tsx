@@ -1,33 +1,19 @@
+import { lazy } from "react";
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import LayoutCustom from "./components/Layout";
-import Computers from "./pages/Computers";
-import { lazy, useEffect } from "react";
-import axiosInstance from "./services/axiosconfig";
-import Auth from "./pages/Auth";
-import Register from "./pages/Register";
 import LayoutCustomAuth from "./components/LayoutCustomAuth";
-import Clients from "./pages/Clients";
 import LayoutCustomClient from "./components/LayoutCustomClient";
+import Auth from "./pages/Auth";
+import Computers from "./pages/Computers";
+import Register from "./pages/Register";
 
 const CrearComputadora = lazy(() => import("./pages/CrearComputadora"));
 const Users = lazy(() => import("./pages/Users"));
 const Maintenance = lazy(() => import("./pages/Maintenance"));
+const Clients = lazy(() => import("./pages/Clients"));
 
 function App() {
-  useEffect(() => {
-    const DEBUG: boolean = JSON.parse(import.meta.env.VITE_DEBUG);
-
-    if (DEBUG == false) {
-      axiosInstance
-        .get(`/`)
-        .then(() => {})
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }
-  }, []);
-
   return (
     <>
       <HashRouter>
@@ -57,7 +43,6 @@ function App() {
           <Route path="/dashboard/clients" element={<LayoutCustomClient />}>
             <Route index path="computers" element={<Computers />} />
             <Route path="maintenance" element={<Maintenance />} />
-
           </Route>
 
           <Route path="/" element={<LayoutCustom />}>

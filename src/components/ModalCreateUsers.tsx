@@ -18,7 +18,6 @@ const ModalCreateUser = ({
   const [form] = Form.useForm();
 
   const createUsers = (values: any) => {
-    console.log(values, "values");
     axiosInstance
       .post(`/api/v1/users`, { ...values, role: "admin" })
       .then(() => {

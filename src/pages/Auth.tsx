@@ -11,13 +11,11 @@ const Auth = () => {
   const navigate = useNavigate();
 
   const localLogin = async () => {
-    let validate = await form.validateFields();
+    await form.validateFields();
     let values = form.getFieldsValue();
-    console.log(validate);
 
     loginUser(values?.email, values?.password)
       .then((response: any) => {
-        console.log(response?.user);
         localStorage.setItem("token", response?.token);
         localStorage.setItem("user", JSON.stringify(response?.user));
         setUser(response?.user);
@@ -31,13 +29,13 @@ const Auth = () => {
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <Card style={{ width: "50%", height: "50%", textAlign: "center" }}>
+      <Card style={{ minWidth: "50%", minHeight: "50%", textAlign: "center" }}>
         <h2>Mantenimientos APP</h2>
         <h3>Iniciar sesion</h3>
 
