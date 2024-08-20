@@ -50,30 +50,28 @@ const LayoutCustom = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ display: "flex", alignItems: "center" }}>
-        <div
-          className="demo-logo"
-          style={{ display: "flex", justifyContent: "space-between" }}
-        />
+        <div style={{ display: "flex", justifyContent: "space-between" }} />
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["0"]}
           items={itemsMenu}
-          style={{ flex: 1, minWidth: 0 }}
+          style={{ flex: 1, minWidth: "60%" }}
         />
-        <span style={{ color: "#fff" }}>
+        <div style={{}}>
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+                <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=3" />
                 {user?.name + " " + user?.last_name}
               </Space>
             </a>
           </Dropdown>
-        </span>
+        </div>
       </Header>
-      <Content style={{ padding: "0 48px" }}>
+      <Content style={{ padding: "0 48px" }} className="container_layout">
         <div
+          className="container_layout__content"
           style={{
             background: colorBgContainer,
             minHeight: "100vh",

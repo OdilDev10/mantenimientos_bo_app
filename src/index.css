@@ -4,3 +4,18 @@
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
 }
+
+@media only screen and (max-width: 600px) {
+  .container_layout {
+    padding: 0px 10px !important;
+  }
+
+  .container_layout__content {
+    padding: 24px 0px !important;
+  }
+
+  /* ANTD */
+  .ant-layout-header {
+    padding: 0px 10px !important;
+  }
+}

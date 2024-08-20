@@ -39,7 +39,6 @@ const TableCustomMaintenance = ({
     total: 0,
   });
 
-
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -203,71 +202,72 @@ const TableCustomMaintenance = ({
         </>
       ),
     },
-    {
-      title: "Acciones",
-      key: "acciones",
-      width: 600,
-      render: (record: any) => {
-        return (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                Swal.fire({
-                  title: "¿Estás seguro?",
-                  text: "Se desactivara el registro",
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonColor: "#3085d6",
-                  cancelButtonColor: "#d33",
-                  confirmButtonText: "¡Sí, desactivar!",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    deleteRegister(record._id);
-                  }
-                });
-              }}
-            >
-              Desactivar
-            </Button>
+    user &&
+      user.role != "client" ? {
+        title: "Acciones",
+        key: "acciones",
+        width: 600,
+        render: (record: any) => {
+          return (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Se desactivara el registro",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "¡Sí, desactivar!",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      deleteRegister(record._id);
+                    }
+                  });
+                }}
+              >
+                Desactivar
+              </Button>
 
-            <Button
-              type="primary"
-              style={{ background: "#009975" }}
-              onClick={() => {
-                Swal.fire({
-                  title: "¿Estás seguro?",
-                  text: "Se activara el registro",
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonColor: "#3085d6",
-                  cancelButtonColor: "#d33",
-                  confirmButtonText: "¡Sí, activar!",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    activeRegister(record._id);
-                  }
-                });
-              }}
-            >
-              Activar
-            </Button>
+              <Button
+                type="primary"
+                style={{ background: "#009975" }}
+                onClick={() => {
+                  Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Se activara el registro",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "¡Sí, activar!",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      activeRegister(record._id);
+                    }
+                  });
+                }}
+              >
+                Activar
+              </Button>
 
-            <Button
-              type="primary"
-              style={{ background: "#e5de00", color: "#000" }}
-              onClick={() => {
-                handleOpenModal();
-                handleMaintenanceEdit(record);
-              }}
-            >
-              Actualizar
-            </Button>
-          </div>
-        );
-      },
-    },
+              <Button
+                type="primary"
+                style={{ background: "#e5de00", color: "#000" }}
+                onClick={() => {
+                  handleOpenModal();
+                  handleMaintenanceEdit(record);
+                }}
+              >
+                Actualizar
+              </Button>
+            </div>
+          );
+        },
+      } : {},
   ];
 
   return (

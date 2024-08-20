@@ -70,7 +70,7 @@ const LayoutCustomClient = () => {
           </Dropdown>
         </span>
       </Header>
-      <Content style={{ padding: "0 48px" }}>
+      <Content style={{ padding: "0 48px" }} className="container_layout">
         <div
           style={{
             background: colorBgContainer,

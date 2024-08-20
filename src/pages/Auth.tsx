@@ -16,12 +16,11 @@ const Auth = () => {
 
     loginUser(values?.email, values?.password)
       .then((response: any) => {
-
         if (response?.user && response?.token) {
           localStorage.setItem("token", response?.token);
           localStorage.setItem("user", JSON.stringify(response?.user));
           setUser(response?.user);
-          navigate("/computers"); 
+          navigate("/computers");
         }
       })
       .catch((error: any) => {
@@ -39,7 +38,7 @@ const Auth = () => {
       }}
     >
       <Card style={{ minWidth: "50%", minHeight: "50%", textAlign: "center" }}>
-        <h2>Mantenimientos APP</h2>
+        <h2>ReparaTic</h2>
         <h3>Iniciar sesion</h3>
 
         <img
